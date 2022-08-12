@@ -1,7 +1,14 @@
+import { InputAutocomplete } from "./input-autocomplete";
+
+interface Item {
+  name: string;
+  id: number;
+}
+
 window.addEventListener('DOMContentLoaded', function () {
-  function dataLoader(text, callback) {
-    var length = Math.max(Math.floor(Math.pow(Math.abs(text.split('').reduce(function (acc, curr) {
-      var result = (acc << 5) - acc + curr.charCodeAt(0);
+  function dataLoader(text: string, callback: (result: Item[]) => void) {
+    const length = Math.max(Math.floor(Math.pow(Math.abs(text.split('').reduce(function (acc, curr) {
+      const result = (acc << 5) - acc + curr.charCodeAt(0);
       return result & result;
     }, 0)), 0.123)) - 5, 0);
     setTimeout(function () {
@@ -14,25 +21,22 @@ window.addEventListener('DOMContentLoaded', function () {
     }, 250);
   }
 
-  function renderer(data, recycle) {
-    var result = recycle;
-    if (!result) {
-      result = document.createElement('li');
-    }
+  function renderer(data: Item, recycle?: HTMLElement) {
+    const result = recycle ?? document.createElement('li');
     result.innerText = data.name;
     return result;
   }
 
-  var input = document.getElementById('input-autocomplete-input');
-  var toggle = document.getElementById('input-autocomplete-toggle');
-  var list = document.getElementById('input-autocomplete-list');
-  var loading = document.getElementById('input-autocomplete-loading');
-  var failed = document.getElementById('input-autocomplete-failed');
-  var placeholder = document.getElementById('input-autocomplete-placeholder');
+  const input = document.getElementById('input-autocomplete-input')! as HTMLInputElement;
+  const toggle = document.getElementById('input-autocomplete-toggle')!;
+  const list = document.getElementById('input-autocomplete-list')!;
+  const loading = document.getElementById('input-autocomplete-loading')!;
+  const failed = document.getElementById('input-autocomplete-failed')!;
+  const placeholder = document.getElementById('input-autocomplete-placeholder')!;
 
-  list.addEventListener('click', function(e) {
-    if (e.target.parentElement == list) {
-      input.value = e.target.innerText;
+  list.addEventListener('click', function(e: Event) {
+    if ((e.target! as HTMLElement).parentElement == list) {
+      input.value = (e.target! as HTMLElement).innerText;
     }
   });
 
